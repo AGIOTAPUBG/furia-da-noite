@@ -1,0 +1,6 @@
+{
+  "name": "Fúria da Noite",
+  "description": "Premium competitive eSports portal and SaaS dashboard for PUBG Mobile scrims, digital accessory shopping, and esports analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

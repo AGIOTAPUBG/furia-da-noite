@@ -1,0 +1,133 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'prhdeoliveira@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Schema validation helpers
+    function isValidUser(data) {
+      return data.uid == request.auth.uid
+        && data.email is string && data.email.size() <= 100
+        && data.username is string && data.username.size() >= 3 && data.username.size() <= 50
+        && data.pubgId is string && data.pubgId.size() >= 5 && data.pubgId.size() <= 30
+        && data.whatsapp is string && data.whatsapp.size() <= 30
+        && data.role in ['user', 'admin']
+        && (data.createdAt is string || data.createdAt == request.time);
+    }
+
+    function isValidScrim(data) {
+      return data.scrimId is string && data.scrimId.size() <= 128
+        && data.title is string && data.title.size() <= 128
+        && data.dateTime is string
+        && data.format is string && data.format.size() <= 50
+        && data.price is number && data.price >= 0
+        && data.totalSlots is number && data.totalSlots >= 1
+        && data.availableSlots is number && data.availableSlots >= 0
+        && (data.lobbyId == null || (data.lobbyId is string && data.lobbyId.size() <= 100))
+        && (data.lobbyPassword == null || (data.lobbyPassword is string && data.lobbyPassword.size() <= 100))
+        && data.status in ['upcoming', 'finished']
+        && (data.createdAt is string || data.createdAt == request.time);
+    }
+
+    function isValidInscription(data) {
+      return data.inscriptionId is string && data.inscriptionId.size() <= 128
+        && data.scrimId is string && data.scrimId.size() <= 128
+        && data.userId == request.auth.uid
+        && data.player1Username is string && data.player1Username.size() <= 50
+        && data.player1PubgId is string && data.player1PubgId.size() <= 30
+        && data.player2Username is string && data.player2Username.size() <= 50
+        && data.player2PubgId is string && data.player2PubgId.size() <= 30
+        && data.whatsapp is string && data.whatsapp.size() <= 30
+        && data.status in ['pending', 'confirmed', 'cancelled']
+        && (data.createdAt is string || data.createdAt == request.time);
+    }
+
+    function isValidProduct(data) {
+      return data.productId is string && data.productId.size() <= 128
+        && data.name is string && data.name.size() <= 128
+        && data.description is string && data.description.size() <= 2048
+        && data.price is number && data.price >= 0
+        && data.type in ['digital', 'affiliate', 'merch']
+        && data.visible is bool
+        && (data.createdAt is string || data.createdAt == request.time);
+    }
+
+    function isValidNews(data) {
+      return data.newsId is string && data.newsId.size() <= 128
+        && data.title is string && data.title.size() <= 256
+        && data.excerpt is string && data.excerpt.size() <= 512
+        && data.content is string && data.content.size() <= 16384
+        && data.category in ['Patch Notes', 'Analysis', 'Announcement']
+        && data.author is string && data.author.size() <= 64
+        && (data.createdAt is string || data.createdAt == request.time);
+    }
+
+    // Rules for individual collections
+
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if (isOwner(userId) || isAdmin()) && isValidUser(request.resource.data)
+                    && (request.resource.data.role == resource.data.role || isAdmin()); // Prevent self elevation
+      allow delete: if isAdmin();
+    }
+
+    match /scrims/{scrimId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidScrim(request.resource.data);
+      allow update: if (isAdmin() && isValidScrim(request.resource.data))
+                    || (isSignedIn() && isValidScrim(request.resource.data) && request.resource.data.availableSlots != null);
+      allow delete: if isAdmin();
+    }
+
+    match /inscriptions/{inscriptionId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid && isValidInscription(request.resource.data);
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidProduct(request.resource.data);
+      allow update: if isAdmin() && isValidProduct(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /news/{newsId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidNews(request.resource.data);
+      allow update: if isAdmin() && isValidNews(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with gaming identity",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Auth User UID" },
+        "email": { "type": "string", "description": "Gamer account email" },
+        "username": { "type": "string", "description": "PUBG Mobile username" },
+        "pubgId": { "type": "string", "description": "PUBG Mobile Character ID" },
+        "whatsapp": { "type": "string", "description": "WhatsApp contact number for coordination" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "username", "pubgId", "whatsapp", "role", "createdAt"]
+    },
+    "Scrim": {
+      "title": "Scrim",
+      "description": "Daily scrim match room with specific schedules and custom details",
+      "type": "object",
+      "properties": {
+        "scrimId": { "type": "string", "description": "Unique match room ID" },
+        "title": { "type": "string", "description": "Title of the match/room" },
+        "dateTime": { "type": "string", "format": "date-time", "description": "Scrim start schedule" },
+        "format": { "type": "string", "description": "Match configuration (e.g. DUO / TPP / MD3)" },
+        "price": { "type": "number", "description": "Match registration cost in BRL" },
+        "totalSlots": { "type": "number", "description": "Maximum number of team slots (usually 25)" },
+        "availableSlots": { "type": "number", "description": "Currently remaining slots for the match" },
+        "lobbyId": { "type": "string", "description": "PUBG Custom Lobby ID, hidden until 15 mins prior" },
+        "lobbyPassword": { "type": "string", "description": "PUBG Custom Lobby Password, hidden until 15 mins prior" },
+        "status": { "type": "string", "enum": ["upcoming", "finished"] },
+        "leaderboard": { "type": "array", "description": "Final standings and individual stats" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["scrimId", "title", "dateTime", "format", "price", "totalSlots", "availableSlots", "status", "createdAt"]
+    },
+    "Inscription": {
+      "title": "Inscription",
+      "description": "A squad/duo registration for a competitive scrim match",
+      "type": "object",
+      "properties": {
+        "inscriptionId": { "type": "string", "description": "Unique registration ID" },
+        "scrimId": { "type": "string", "description": "Referenced scrim ID" },
+        "userId": { "type": "string", "description": "Id of the user who registered" },
+        "player1Username": { "type": "string", "description": "Gamer ID of player 1" },
+        "player1PubgId": { "type": "string", "description": "Character PUBG ID of player 1" },
+        "player2Username": { "type": "string", "description": "Gamer ID of player 2" },
+        "player2PubgId": { "type": "string", "description": "Character PUBG ID of player 2" },
+        "whatsapp": { "type": "string", "description": "WhatsApp contact for ticket processing" },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "cancelled"] },
+        "paymentPixCode": { "type": "string", "description": "Copied key or payload to make BRL Pix payment" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["inscriptionId", "scrimId", "userId", "player1Username", "player1PubgId", "player2Username", "player2PubgId", "whatsapp", "status", "createdAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "E-commerce highlight items including iPad View, Affiliate Gear and Fúria apparel",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string", "description": "Unique product ID" },
+        "name": { "type": "string", "description": "Display name of product" },
+        "description": { "type": "string", "description": "Brief text explaining features" },
+        "price": { "type": "number", "description": "Value in BRL" },
+        "type": { "type": "string", "enum": ["digital", "affiliate", "merch"] },
+        "features": { "type": "array", "description": "Unique specs or feature items list" },
+        "link": { "type": "string", "description": "External affiliate or custom checkout URL link" },
+        "image": { "type": "string", "description": "Image asset reference path or URL" },
+        "rating": { "type": "number", "description": "Customer feedback rating (e.g. 4.8)" },
+        "sizes": { "type": "array", "description": "Size selectors (P, M, G, GG)" },
+        "inventory": { "type": "number", "description": "Quantity in storage" },
+        "visible": { "type": "boolean", "description": "Flag to show or hide the item from shop" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "name", "description", "price", "type", "visible", "createdAt"]
+    },
+    "News": {
+      "title": "News",
+      "description": "Meta reviews, competitive PUBG update news, and highlight play clips",
+      "type": "object",
+      "properties": {
+        "newsId": { "type": "string", "description": "Unique publication ID" },
+        "title": { "type": "string", "description": "Headline text" },
+        "excerpt": { "type": "string", "description": "Short summary text" },
+        "content": { "type": "string", "description": "Complete markdown post body text" },
+        "category": { "type": "string", "enum": ["Patch Notes", "Analysis", "Announcement"] },
+        "image": { "type": "string", "description": "Header image path" },
+        "videoUrl": { "type": "string", "description": "Top clip highlight video or YouTube embed" },
+        "author": { "type": "string", "description": "Furiadanoite owner alias" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["newsId", "title", "excerpt", "content", "category", "author", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile document indexed by UID"
+    },
+    "/scrims/{scrimId}": {
+      "schema": "Scrim",
+      "description": "A scrim room scheduled map match instance"
+    },
+    "/inscriptions/{inscriptionId}": {
+      "schema": "Inscription",
+      "description": "Match registration document for competitive Scrims"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "E-shop merchandise, digital perspective hacks, or affiliate electronics products catalog"
+    },
+    "/news/{newsId}": {
+      "schema": "News",
+      "description": "Official gaming community news blogs and top videos highlights log"
+    }
+  }
+}
