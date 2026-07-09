@@ -17,6 +17,7 @@ export const t: Record<Lang, Record<string, string>> = {
     nav_cta: 'SER APOIADOR',
     nav_panel: 'PAINEL',
     nav_login: 'ENTRAR',
+  nav_register: 'CRIAR CONTA',
     nav_locked: 'Exclusivo para Apoiadores',
 
     // HERO
@@ -76,6 +77,7 @@ export const t: Record<Lang, Record<string, string>> = {
     nav_cta: 'BE A SUPPORTER',
     nav_panel: 'PANEL',
     nav_login: 'LOGIN',
+  nav_register: 'SIGN UP',
     nav_locked: 'Exclusive for Supporters',
 
     hero_tag: 'PUBG MOBILE · DUO ROOM · BRAZIL',
@@ -128,6 +130,7 @@ export const t: Record<Lang, Record<string, string>> = {
     nav_cta: 'SER APOIADOR',
     nav_panel: 'PANEL',
     nav_login: 'ENTRAR',
+  nav_register: 'CREAR CUENTA',
     nav_locked: 'Exclusivo para Apoiadores',
 
     hero_tag: 'PUBG MOBILE · SALA DÚO · BRASIL',

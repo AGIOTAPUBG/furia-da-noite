@@ -1290,7 +1290,10 @@ export default function App() {
         <button className="nav-cta" onClick={() => setPage('apoiadores')}>{tr('nav_cta')}</button>
         {user
           ? <button className="nav-login" onClick={() => navigate('dashboard')}>{tr('nav_panel')}</button>
-          : <button className="nav-login" onClick={() => setPage('login')}>{tr('nav_login')}</button>
+          : (<>
+              <button className="nav-login" onClick={() => setPage('login')}>{tr('nav_login')}</button>
+              <button className="nav-login" style={{ background: 'linear-gradient(135deg, var(--purple), var(--green))' }} onClick={() => setPage('register')}>{tr('nav_register')}</button>
+            </>)
         }
         <div className="lang-toggle">
           {LANGS.map(l => (
