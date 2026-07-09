@@ -1502,6 +1502,7 @@ export default function App() {
                       </div>
                     ))}
                   </div>
+                <ChatSala scrimId={activeScrim.scrim_id} autorNome={user?.nick_pubg || user?.username || 'Visitante'} />
                 </div>
               </div>
             ) : (
@@ -1617,5 +1618,65 @@ export default function App() {
         <InscModal scrim={activeScrim} onClose={() => { setInscModal(false); setSelectedPair(null) }} onInscrever={doInscrever} selectedPair={selectedPair} />
       )}
     </>
+  )
+}
+
+
+function ChatSala({ scrimId, autorNome }: { scrimId: string; autorNome: string }) {
+  const [mensagens, setMensagens] = useState<{ autor_nome: string; mensagem: string; created_at: string }[]>([])
+  const [texto, setTexto] = useState('')
+  const [enviando, setEnviando] = useState(false)
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    let ativo = true
+    const load = () => api(`/scrims/${scrimId}/chat`).then((d: any) => { if (ativo) setMensagens(d.mensagens || []) }).catch(() => {})
+    load()
+    const iv = setInterval(load, 5000)
+    return () => { ativo = false; clearInterval(iv) }
+  }, [scrimId])
+
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [mensagens])
+
+  const enviar = async () => {
+    if (!texto.trim() || enviando) return
+    setEnviando(true)
+    try {
+      await api(`/scrims/${scrimId}/chat`, { method: 'POST', body: JSON.stringify({ autor_nome: autorNome || 'Jogador', mensagem: texto.trim() }) })
+      setTexto('')
+      const d = await api(`/scrims/${scrimId}/chat`)
+      setMensagens(d.mensagens || [])
+    } catch (e) {
+      // silencioso
+    } finally {
+      setEnviando(false)
+    }
+  }
+
+  return (
+    <div style={{ background: '#1a1a2e', border: '1px solid #2a2a4a', borderRadius: 12, padding: '1rem', display: 'flex', flexDirection: 'column', height: 420 }}>
+      <h4 style={{ color: '#fff', margin: '0 0 .75rem', fontFamily: "'Orbitron'", fontSize: '.95rem' }}>💬 Chat da Sala</h4>
+      <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8, marginBottom: '.75rem' }}>
+        {mensagens.length === 0 && (
+          <p style={{ color: 'rgba(255,255,255,.3)', fontSize: '.8rem', textAlign: 'center', marginTop: '2rem' }}>Nenhuma mensagem ainda. Diga oi! 👋</p>
+        )}
+        {mensagens.map((m, idx) => (
+          <div key={idx} style={{ background: '#0f0f1e', borderRadius: 8, padding: '6px 10px' }}>
+            <div style={{ color: '#7c3aed', fontSize: '.7rem', fontWeight: 700 }}>{m.autor_nome}</div>
+            <div style={{ color: 'rgba(255,255,255,.8)', fontSize: '.82rem', wordBreak: 'break-word' }}>{m.mensagem}</div>
+          </div>
+        ))}
+        <div ref={bottomRef} />
+      </div>
+      <div style={{ display: 'flex', gap: 6 }}>
+        <input value={texto} onChange={e => setTexto(e.target.value)} onKeyDown={e => e.key === 'Enter' && enviar()}
+          placeholder="Digite sua mensagem..." maxLength={500}
+          style={{ flex: 1, background: '#0f0f1e', border: '1px solid #2a2a4a', borderRadius: 8, padding: '8px 10px', color: '#fff', fontSize: '.85rem' }} />
+        <button onClick={enviar} disabled={enviando || !texto.trim()}
+          style={{ background: '#7c3aed', border: 'none', borderRadius: 8, padding: '0 14px', color: '#fff', cursor: 'pointer', opacity: enviando ? .6 : 1 }}>
+          Enviar
+        </button>
+      </div>
+    </div>
   )
 }
