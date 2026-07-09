@@ -1402,13 +1402,17 @@ export default function App() {
     <p style={{ color: '#00ff6a', fontWeight: 700 }}>✅ Voce entrou na fila! Fique de olho no WhatsApp.</p>
   ) : (
     <form onSubmit={enviarFila} style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center' }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center', maxWidth: 560 }}>
-        {filaJogos.map((j: any) => (
-          <button key={j.id} type="button" onClick={() => setFilaJogo(j.id)}
-            style={{ background: filaJogo === j.id ? '#8b5cf6' : '#1a1a2e', color: '#fff', border: filaJogo === j.id ? '1px solid #8b5cf6' : '1px solid #333', borderRadius: 20, padding: j.id === 'pubg_mobile' ? '12px 22px' : '8px 14px', fontWeight: j.id === 'pubg_mobile' ? 700 : 400, fontSize: j.id === 'pubg_mobile' ? 15 : 12, cursor: 'pointer' }}>
-            {j.nome}
-          </button>
-        ))}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))', gap: 8, maxWidth: 560, margin: '0 auto' }}>
+        {filaJogos.map((j: any) => {
+          const ativo = filaJogo === j.id
+          return (
+            <button key={j.id} type="button" onClick={() => setFilaJogo(j.id)}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: ativo ? 'linear-gradient(135deg, #8b5cf6, #6d28d9)' : '#1a1a2e', color: '#fff', border: ativo ? '1px solid #a78bfa' : '1px solid #333', borderRadius: 12, padding: '10px 8px', boxShadow: ativo ? '0 0 0 3px rgba(139,92,246,.25)' : 'none', cursor: 'pointer', transition: 'transform .15s, box-shadow .15s' }}>
+              <span style={{ fontSize: 22 }}>{iconeCategoria(j.categoria)}</span>
+              <span style={{ fontSize: 12, fontWeight: ativo ? 700 : 500, textAlign: 'center', lineHeight: 1.2 }}>{j.nome}</span>
+            </button>
+          )
+        })}
       </div>
       <input value={filaNick} onChange={e => setFilaNick(e.target.value)} placeholder="Seu nick"
         style={{ background: '#1a1a2e', color: '#fff', border: '1px solid #333', borderRadius: 8, padding: '10px 12px', width: 140 }} />
@@ -1679,4 +1683,20 @@ function ChatSala({ scrimId, autorNome }: { scrimId: string; autorNome: string }
       </div>
     </div>
   )
+}
+
+function iconeCategoria(categoria?: string) {
+  const mapa: Record<string, string> = {
+    battle_royale: String.fromCodePoint(0x1FA82),
+    tatico_fps: String.fromCodePoint(0x1F3AF),
+    fps: String.fromCodePoint(0x1F52B),
+    moba: String.fromCodePoint(0x2694, 0xFE0F),
+    rpg: String.fromCodePoint(0x1F5E1, 0xFE0F),
+    esportes: String.fromCodePoint(0x26BD),
+    corrida: String.fromCodePoint(0x1F3CE, 0xFE0F),
+    luta: String.fromCodePoint(0x1F94A),
+    cartas: String.fromCodePoint(0x1F0CF),
+    estrategia: String.fromCodePoint(0x265F, 0xFE0F),
+  }
+  return mapa[categoria || ''] || String.fromCodePoint(0x1F3AE)
 }
