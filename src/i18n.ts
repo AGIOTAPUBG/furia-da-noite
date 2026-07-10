@@ -22,6 +22,7 @@ export const t: Record<Lang, Record<string, string>> = {
 
     // HERO
     hero_tag: 'PUBG MOBILE · SALA DUO · BRASIL',
+  hero_h1: 'A ARENA', hero_h2_pre: 'É', hero_h2_accent: 'SUA',
     hero_sub: 'A plataforma de salas mais competitiva do Brasil. Inscreva seu DUO, ocupe seu assento no avião e dispute os melhores prêmios.',
     hero_cta_scrims: 'VER SALAS ✈',
     hero_cta_create: 'CRIAR MINHA SALA',
@@ -81,6 +82,7 @@ export const t: Record<Lang, Record<string, string>> = {
     nav_locked: 'Exclusive for Supporters',
 
     hero_tag: 'PUBG MOBILE · DUO ROOM · BRAZIL',
+  hero_h1: 'THE ARENA', hero_h2_pre: 'IS', hero_h2_accent: 'YOURS',
     hero_sub: 'The most competitive room platform in Brazil. Register your DUO, take your seat on the plane and compete for the best prizes.',
     hero_cta_scrims: 'VIEW ROOMS ✈',
     hero_cta_create: 'CREATE MY ROOM',
@@ -134,6 +136,7 @@ export const t: Record<Lang, Record<string, string>> = {
     nav_locked: 'Exclusivo para Apoiadores',
 
     hero_tag: 'PUBG MOBILE · SALA DÚO · BRASIL',
+  hero_h1: 'LA ARENA', hero_h2_pre: 'ES', hero_h2_accent: 'TUYA',
     hero_sub: 'La plataforma de salas más competitiva de Brasil. Inscribe tu DÚO, ocupa tu asiento en el avión y compite por los mejores premios.',
     hero_cta_scrims: 'VER SALAS ✈',
     hero_cta_create: 'CREAR MI SALA',

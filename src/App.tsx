@@ -1248,12 +1248,20 @@ body{background:var(--bg);color:var(--white);font-family:'Exo 2',sans-serif}
 @keyframes pulse{0%,100%{filter:drop-shadow(0 0 20px rgba(124,92,255,.4))}50%{filter:drop-shadow(0 0 45px rgba(57,255,136,.55))}}
 .hero-title{font-family:'Orbitron',sans-serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:900;line-height:1;margin-bottom:1.5rem;background:linear-gradient(135deg,#fff 0%,#7c5cff 55%,#39ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hero-sub{color:rgba(237,237,242,.6);font-size:1.1rem;line-height:1.7;margin-bottom:2.5rem}
+.hero-eyebrow{display:flex;align-items:center;gap:.6rem;justify-content:center;margin-bottom:1.4rem}
+.hero-split .hero-eyebrow{justify-content:flex-start}
+.hero-eyebrow-text{font-size:.85rem;letter-spacing:3px;text-transform:uppercase;color:var(--green)}
+.accent-word{color:var(--green)}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--danger);display:inline-block;animation:pulseDot 1.8s infinite}
+@keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(255,59,92,.55)}70%{box-shadow:0 0 0 8px rgba(255,59,92,0)}100%{box-shadow:0 0 0 0 rgba(255,59,92,0)}}
 .hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
-.btn-primary{background:var(--purple);color:#fff;border:none;border-radius:6px;padding:14px 32px;font-family:'Barlow Condensed',sans-serif;font-size:1rem;letter-spacing:2px;cursor:pointer;font-weight:700;transition:all .2s;text-transform:uppercase}
+.btn-primary{background:var(--purple);color:#fff;border:none;border-radius:6px;padding:14px 32px;font-family:'Barlow Condensed',sans-serif;font-size:1rem;letter-spacing:2px;cursor:pointer;font-weight:700;transition:all .2s;text-transform:uppercase;clip-path:polygon(0 0,100% 0,100% 70%,94% 100%,0 100%)}
 .btn-primary:hover{background:#6a47f0;transform:translateY(-2px)}
 .btn-outline{background:none;color:#fff;border:1px solid rgba(237,237,242,.3);border-radius:6px;padding:14px 32px;font-family:'Barlow Condensed',sans-serif;font-size:1rem;letter-spacing:2px;cursor:pointer;transition:all .2s;text-transform:uppercase}
 .btn-outline:hover{border-color:#fff}
-.hero-stats{display:flex;gap:3rem;justify-content:center;flex-wrap:wrap}
+.hero-stats{display:flex;gap:2.2rem;flex-wrap:wrap;padding-top:1.6rem;border-top:1px solid var(--line);justify-content:center}
+.hero-split .hero-stats{justify-content:flex-start}
+.hero-split .hero-stats{justify-content:flex-start}
 .hero-stat-num{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;color:var(--white)}
 .hero-stat-label{font-family:'JetBrains Mono',monospace;color:var(--gray);font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase}
 .section{padding:4rem 2rem;max-width:1200px;margin:0 auto}
@@ -1386,11 +1394,8 @@ body{background:var(--bg);color:var(--white);font-family:'Exo 2',sans-serif}
               <div className="hero-grid" />
 <div className="hero-media bracket"><img src="/hero-duotone.jpg" alt="PUBG Mobile" /><span className="hero-media-tag mono">AO VIVO // FdN</span></div>
               <div className="hero-content">
-                <img src="/LOGO.png" alt="Furia da Noite" className="hero-logo" />
-                <p style={{ color: 'var(--purple)', fontFamily: "'Barlow Condensed'", letterSpacing: 4, fontSize: '.9rem', marginBottom: '1rem' }}>
-                  {tr('hero_tag')}
-                </p>
-                <h1 className="hero-title">FURIA<br />DA <span>NOITE</span></h1>
+<div className="hero-eyebrow"><span className="pulse-dot"></span><span className="mono hero-eyebrow-text">{tr("hero_tag")}</span></div>
+<h1 className="hero-title">{tr("hero_h1")}<br />{tr("hero_h2_pre")} <span className="accent-word">{tr("hero_h2_accent")}</span></h1>
                 <p className="hero-sub">{tr('hero_sub')}</p>
                 <div className="hero-actions">
                   <button className="btn-primary" onClick={() => navigate('scrims')}>{tr('hero_cta_scrims')}</button>
