@@ -1238,6 +1238,12 @@ body{background:var(--bg);color:var(--white);font-family:'Exo 2',sans-serif}
 .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%, rgba(124,92,255,.22) 0%, transparent 70%)}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(124,92,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,255,.05) 1px,transparent 1px);background-size:40px 40px}
 .hero-content{position:relative;z-index:1;max-width:700px;padding:2rem}
+.hero-split{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;text-align:left;max-width:1300px;margin:0 auto;padding:0 2rem}
+.hero-split .hero-content{max-width:none;padding:2rem 0}
+.hero-media{position:relative;order:2}
+.hero-media img{width:100%;border-radius:12px;display:block;filter:contrast(1.05)}
+.hero-media-tag{position:absolute;bottom:14px;left:14px;background:rgba(10,10,15,.75);color:var(--green);padding:4px 10px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase}
+@media (max-width:900px){.hero-split{grid-template-columns:1fr;text-align:center}.hero-media{order:-1}}
 .hero-logo{width:140px;margin-bottom:2rem;filter:drop-shadow(0 0 30px rgba(124,92,255,.5));animation:pulse 3s ease-in-out infinite}
 @keyframes pulse{0%,100%{filter:drop-shadow(0 0 20px rgba(124,92,255,.4))}50%{filter:drop-shadow(0 0 45px rgba(57,255,136,.55))}}
 .hero-title{font-family:'Orbitron',sans-serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:900;line-height:1;margin-bottom:1.5rem;background:linear-gradient(135deg,#fff 0%,#7c5cff 55%,#39ff88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -1375,9 +1381,10 @@ body{background:var(--bg);color:var(--white);font-family:'Exo 2',sans-serif}
         {/* HOME */}
         {page === 'home' && (
           <>
-            <section className="hero">
+<section className="hero hero-split">
               <div className="hero-bg" />
               <div className="hero-grid" />
+<div className="hero-media bracket"><img src="/hero-duotone.jpg" alt="PUBG Mobile" /><span className="hero-media-tag mono">AO VIVO // FdN</span></div>
               <div className="hero-content">
                 <img src="/LOGO.png" alt="Furia da Noite" className="hero-logo" />
                 <p style={{ color: 'var(--purple)', fontFamily: "'Barlow Condensed'", letterSpacing: 4, fontSize: '.9rem', marginBottom: '1rem' }}>
